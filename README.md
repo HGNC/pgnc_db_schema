@@ -4,7 +4,6 @@
     * [Dependencies](#dependencies)
   * [Connecting to the DB](#connecting-to-the-db)
   * [Schema and Data dictionary](#schema-and-data-dictionary)
-  * [Create a PGNC database in your AWS account](create-a-pgnc-database-in-your-aws-account)
 
 ## Building the AWS database infrastructure
 
