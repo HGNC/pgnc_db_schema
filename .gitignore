@@ -10,3 +10,21 @@ Thumbs.db
 .vscode
 # my ignore #
 #############
+# Local .terraform directories
+terraform/.terraform/*
+
+# .tfstate files
+terraform/*.tfstate
+terraform*.tfstate.*
+
+# Crash log files
+terraform/crash.log
+terraform/crash.*.log
+
+# Ignore CLI configuration files
+terraform/.terraformrc
+terraform/terraform.rc
+
+# Ignore transient lock info files created by terraform apply
+terraform/.terraform.tfstate.lock.info
+
