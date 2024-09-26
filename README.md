@@ -13,7 +13,7 @@
 The following need to be installed before you use the terraform scripts.
   * [AWS account][1]
   * [AWS CLI][3]
-  * [Terraform v1.5.7][4] [v1.5.7 binaries download][5]
+  * [Terraform v1.5.7][4] ([v1.5.7 binaries download][5])
 
 ### Configure the AWS CLI
 
