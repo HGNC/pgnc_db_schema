@@ -2,7 +2,14 @@
 ## Table of contents
   * [Building the AWS database infrastructure](#building-the-aws-database-infrastructure)
     * [Dependencies](#dependencies)
+    * [Configure the AWS CLI](#configure-the-aws-cli)
+    * [Create a PGNC database in your AWS account](create-a-pgnc-database-in-your-aws-account)
+    * [Create an SSH key pair](create-an-ssh-key-pair)
+    * [Create a secret for your `dbadmin` DB credentials](create_a_secret_for_your_dbadmin_db_credentials)
+    * [Create the AWS resources using `Terraform`](create-the-aws-resources-using-terraform)
   * [Connecting to the DB](#connecting-to-the-db)
+    * [General SSH Tunnel and port forwarding](general_ssh_tunnel_and_port_forwarding)
+    * [Connecting to the DB using `DBeaver`](connecting_to_the_db_using_dbeaver)
   * [Schema and Data dictionary](#schema-and-data-dictionary)
 
 ## Building the AWS database infrastructure
@@ -45,7 +52,7 @@ Do not change the key name as it is used in the terraform scripts.
 
 The above command will create a file called `pgnc.pem` in the current directory. This is your private ssh key to connect to the EC2 bastion once the aws resources have been created. Move the file to a secure location and make sure it is not publicly accessible. The command also stores the public key in the AWS account under the name `pgnc` and can be found in the AWS console under EC2 -> Network & Security -> Key Pairs.
 
-#### Create a database admin user
+#### Create a secret for your `dbadmin` DB credentials 
 
 The database that we will create will have an admin username and password. These credentials will be managed by the AWS Secrets Manager. The password must be at least 8 characters long and contain at least one uppercase letter, one lowercase letter, one number, and one special character. Remember that this will be your master/root username and password for the database. Yous should store this information in a secure location and create roles within the PostgreSQL database for other users.
 
@@ -59,7 +66,7 @@ aws secretsmanager create-secret \
 
 Please replace `<your_password>` with your desired password but leave the secrets name as `rds_admin_creds` as this is used in the terraform scripts. The password must be at least 8 characters long and contain at least one uppercase letter, one lowercase letter, one number, and one special character.
 
-#### Create the AWS resources
+#### Create the AWS resources using `Terraform`
 
 After setting up the AWS CLI and completing all the dependencies, you can now create the PGNC database and associated resources. Simply run the following in the terraform directory of this repo:
 ```shell
@@ -81,6 +88,7 @@ After the terraform script has completed, you will see the output of the EC2 bas
 
 ## Connecting to the DB
 
+### General SSH Tunnel and port forwarding
 To connect to the database, you will need to SSH tunnel through the EC2 bastion instance. You can create a tunnel using the following command:
 ```shell
 ssh -i <path_to_your_pem_file> -L 5432:<db_instance_endpoint>:5432 ubuntu@<ec2_bastion_public_ip> -N
@@ -93,9 +101,11 @@ Once the tunnel is running, you can connect to the database using the following 
 
 You can use any PostgreSQL client to connect to the database. You can also use the `psql` command line tool to connect to the database. I would use a tool like [DBeaver][7] to connect to the database as it can handle the ssh tunnel and the DB connection.
 
+If you would like to get more information about `SSH`, you can get it at [ssh.com][6].
+
 ### Connecting to the DB using `DBeaver`
 
-1. Open DBeaver and click on the `Database` menu and select `New Database Connection`.
+1. Open [DBeaver][7] and click on the `Database` menu and select `New Database Connection`.
 2. Select `PostgreSQL` from the list of databases.
 3. Fill in the following information:
    * Host: `localhost`
