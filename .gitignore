@@ -28,3 +28,4 @@ terraform/terraform.rc
 # Ignore transient lock info files created by terraform apply
 terraform/.terraform.tfstate.lock.info
 
+creds.json
