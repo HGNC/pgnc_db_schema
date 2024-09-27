@@ -48,10 +48,17 @@ resource "aws_instance" "pgnc-bastion" {
     hostname_type                        = "ip-name"
   }
 
+  provisioner "file" {
+    source      = "../pgnc-public.sql"
+    destination = "/tmp/pgnc-public.sql"
+  }
   provisioner "remote-exec" {
     inline = [
       "sudo apt update",
-      "sudo apt install postgresql-client-common"
+      "sudo apt-get install -y postgresql-client",
+      " PGPASSWORD=${local.rds_admin_creds.password} psql -h ${module.pgnc_rds.db_instance_address} -U ${local.rds_admin_creds.username} -d postgres -f /tmp/pgnc-public.sql",
+      "rm /tmp/terraform_*.ssh",
+      "rm /tmp/pgnc-public.sql"
     ]
   }
 
