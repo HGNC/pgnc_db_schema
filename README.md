@@ -3,13 +3,13 @@
   * [Building the AWS database infrastructure](#building-the-aws-database-infrastructure)
     * [Dependencies](#dependencies)
     * [Configure the AWS CLI](#configure-the-aws-cli)
-    * [Create a PGNC database in your AWS account](create-a-pgnc-database-in-your-aws-account)
-    * [Create an SSH key pair](create-an-ssh-key-pair)
-    * [Create a secret for your `dbadmin` DB credentials](create_a_secret_for_your_dbadmin_db_credentials)
-    * [Create the AWS resources using `Terraform`](create-the-aws-resources-using-terraform)
+    * [Create a PGNC database in your AWS account](#create-a-pgnc-database-in-your-aws-account)
+    * [Create an SSH key pair](#create-an-ssh-key-pair)
+    * [Create a secret for your `dbadmin` DB credentials](#create-a-secret-for-your-dbadmin-db-credentials)
+    * [Create the AWS resources using `Terraform`](#create-the-aws-resources-using-terraform)
   * [Connecting to the DB](#connecting-to-the-db)
-    * [General SSH Tunnel and port forwarding](general_ssh_tunnel_and_port_forwarding)
-    * [Connecting to the DB using `DBeaver`](connecting_to_the_db_using_dbeaver)
+    * [General SSH Tunnel and port forwarding](#general_ssh_tunnel_and_port_forwarding)
+    * [Connecting to the DB using `DBeaver`](#connecting_to_the_db_using_dbeaver)
   * [Schema and Data dictionary](#schema-and-data-dictionary)
 
 ## Building the AWS database infrastructure
@@ -51,6 +51,11 @@ aws ec2 create-key-pair \
 Do not change the key name as it is used in the terraform scripts.
 
 The above command will create a file called `pgnc.pem` in the current directory. This is your private ssh key to connect to the EC2 bastion once the aws resources have been created. Move the file to a secure location and make sure it is not publicly accessible. The command also stores the public key in the AWS account under the name `pgnc` and can be found in the AWS console under EC2 -> Network & Security -> Key Pairs.
+
+The `aws ec2 create-key-pair` command does not set the correct file permissions, so to complete the creation of the SSH key pair you need to run the following:
+```shell
+chmod 400 pgnc.pem
+```
 
 #### Create a secret for your `dbadmin` DB credentials 
 
