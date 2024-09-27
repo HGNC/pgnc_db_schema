@@ -52,6 +52,11 @@ Do not change the key name as it is used in the terraform scripts.
 
 The above command will create a file called `pgnc.pem` in the current directory. This is your private ssh key to connect to the EC2 bastion once the aws resources have been created. Move the file to a secure location and make sure it is not publicly accessible. The command also stores the public key in the AWS account under the name `pgnc` and can be found in the AWS console under EC2 -> Network & Security -> Key Pairs.
 
+The `aws ec2 create-key-pair` command does not set the correct file permissions, so to complete the creation of the SSH key pair you need to run the following:
+```shell
+chmod 400 pgnc.pem
+```
+
 #### Create a secret for your `dbadmin` DB credentials 
 
 The database that we will create will have an admin username and password. These credentials will be managed by the AWS Secrets Manager. The password must be at least 8 characters long and contain at least one uppercase letter, one lowercase letter, one number, and one special character. Remember that this will be your master/root username and password for the database. Yous should store this information in a secure location and create roles within the PostgreSQL database for other users.
