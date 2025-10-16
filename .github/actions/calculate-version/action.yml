@@ -1,0 +1,49 @@
+name: Calculate Version
+description: Compute the next semantic version for db-data releases.
+inputs:
+  release_type:
+    description: >-
+      Optional override for bump type (patch, minor, major). Defaults to patch.
+    required: false
+  explicit_version:
+    description: >-
+      Optional explicit semantic version (vX.Y.Z) that overrides calculated bumps.
+    required: false
+  github_token:
+    description: >-
+      Token used for GitHub API requests. Defaults to the workflow's GITHUB_TOKEN.
+    required: false
+outputs:
+  next_version:
+    description: Resolved next semantic version tag (prefixed with v).
+    value: ${{ steps.resolve.outputs.next_version }}
+  is_bootstrap:
+    description: 'true when the repository has no existing semantic tags.'
+    value: ${{ steps.resolve.outputs.is_bootstrap }}
+  previous_version:
+    description: Latest semantic tag discovered before calculation, if any.
+    value: ${{ steps.resolve.outputs.previous_version }}
+  release_strategy:
+    description: Source of the version decision (bootstrap, auto, explicit).
+    value: ${{ steps.resolve.outputs.release_strategy }}
+  resolved_release_type:
+    description: Bump type used for calculation after overrides are considered.
+    value: ${{ steps.resolve.outputs.resolved_release_type }}
+runs:
+  using: composite
+  steps:
+    - name: Resolve next version
+      id: resolve
+      shell: bash
+      env:
+        INPUT_RELEASE_TYPE: ${{ inputs.release_type }}
+        INPUT_EXPLICIT_VERSION: ${{ inputs.explicit_version }}
+        INPUT_GITHUB_TOKEN: ${{ inputs.github_token }}
+      run: |
+        set -euo pipefail
+        export RELEASE_TYPE="${INPUT_RELEASE_TYPE:-}"
+        export EXPLICIT_VERSION="${INPUT_EXPLICIT_VERSION:-}"
+        if [ -n "${INPUT_GITHUB_TOKEN:-}" ]; then
+          export GITHUB_TOKEN="${INPUT_GITHUB_TOKEN}"
+        fi
+        node "$GITHUB_ACTION_PATH/index.js"

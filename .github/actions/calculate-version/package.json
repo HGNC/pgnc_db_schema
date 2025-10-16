@@ -1,0 +1,13 @@
+{
+  "name": "calculate-version-action",
+  "version": "0.1.0",
+  "description": "Composite action helper that computes the next semantic release tag.",
+  "private": true,
+  "type": "commonjs",
+  "engines": {
+    "node": ">=18"
+  },
+  "scripts": {
+    "test": "node --test"
+  }
+}
